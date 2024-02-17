@@ -1,5 +1,6 @@
 use anyhow::Result;
 use clap::{crate_version, Parser};
+use std::io::{self, BufRead};
 
 use timecalc_rs::{calculate_total_time, duration_to_str};
 
@@ -21,14 +22,31 @@ Valid duration units are:
 struct Args {
     #[clap(
         help = "Time durations to calculate in time ranges or intervals, e.g. 9-12:30, 1h or -30m",
-        allow_hyphen_values = true
+        allow_hyphen_values = true,
+        required_unless_present = "stdin"
     )]
     durations: Vec<String>,
+    #[clap(
+        help = "Read durations from stdin",
+        short,
+        long,
+        conflicts_with = "durations"
+    )]
+    stdin: bool,
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    let durations = args.durations;
+    let durations = if args.stdin {
+        let input = io::stdin()
+            .lock()
+            .lines()
+            .next()
+            .expect("Read from stdin failed")?;
+        input.split_whitespace().map(|s| s.to_string()).collect()
+    } else {
+        args.durations
+    };
     let total_duration = calculate_total_time(&durations)?;
     let output = duration_to_str(total_duration);
     println!("{}", output);

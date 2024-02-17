@@ -49,3 +49,7 @@ The easiest way to install timecalc-rs is using `cargo`:
 cargo install --git https://github.com/Granddave/timecalc-rs
 ```
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+

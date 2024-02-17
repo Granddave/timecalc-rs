@@ -1,13 +1,13 @@
 # Timecalc-rs
 
-Simple CLI tool that calculates the total time spent on a project given time ranges and intervals.
+Timecalc-rs is a simple CLI tool that calculates the total time spent on a project given time ranges and intervals.
 
 This is the Rust implementation of my [previous tool written in Python](https://github.com/Granddave/timecalc)
 
 ## How to use
 
 ```bash
-$ ./timecalc --help
+$ timecalc --help
 Calculates the total time of a given set of time ranges and intervals
 A duration is either a time range or an interval.
 Time ranges are specified as `start-end`, e.g. `9-12:30`.
@@ -29,15 +29,19 @@ Options:
   -V, --version  Print version
 ```
 
-Let's say that you work the whole morning and have a daily standup for 15 minutes and a coffe break
-for 30 minutes. In the afternoon you work two hours:
+### Example
+
+Let's say you worked on a project from 7:00 to 11:30, including a 15 minute break, and then worked another 4 hours after lunch.
+You can calculate the total time spent on the project like this:
 
 ```bash
-$ timecalc 7:00-12:00 -15m -30m 2h
-6h 15m
+$ timecalc 7-11:30 -15m 4h
+8h 15m
 ```
 
 ## Installation
+
+The easiest way to install timecalc-rs is using `cargo`:
 
 ```bash
 cargo install --git https://github.com/Granddave/timecalc-rs

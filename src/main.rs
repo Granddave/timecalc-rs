@@ -5,9 +5,24 @@ use timecalc_rs::{calculate_total_time, duration_to_str};
 
 #[derive(Parser, Debug)]
 #[clap(name = "Timecalc", version = crate_version!())]
+#[clap(
+    about = "Calculates the total time of a given set of time ranges and intervals
+A duration is either a time range or an interval.
+Time ranges are specified as `start-end`, e.g. `9-12:30`.
+Intervals are specified as `+duration` or `-duration`, e.g. `1h` or `-30m`.
+
+Valid duration units are:
+  `w` for weeks
+  `d` for days
+  `h` for hours
+  `m` for minutes"
+)]
 struct Args {
     #[clap(required = true)]
-    #[clap(help = "Time durations to calculate, e.g. 1w 2d 3h 4m -15m 08:00-12:00 12:30-16")]
+    #[clap(allow_hyphen_values = true)]
+    #[clap(
+        help = "Time durations to calculate in time ranges or intervals, e.g. `9-12:30`, `1h` or `-30m`"
+    )]
     durations: Vec<String>,
 }
 

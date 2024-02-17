@@ -2,9 +2,15 @@
 name = "timecalc-rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["David Isaksson <davidisaksson93@gmail.com>"]
+
+[[bin]]
+name = "timecalc"
+path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0.79"
 chrono = "0.4"
+clap = { version = "4.5.1", features = ["derive", "cargo"] }
 regex = "1.5"
 thiserror = "1.0.57"

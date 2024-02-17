@@ -1,19 +1,21 @@
 use anyhow::Result;
-use std::env;
+use clap::{crate_version, Parser};
 
-use timecalc_rs::{calculate_total_time, timedelta_to_str};
+use timecalc_rs::{calculate_total_time, duration_to_str};
+
+#[derive(Parser, Debug)]
+#[clap(name = "Timecalc", version = crate_version!())]
+struct Args {
+    #[clap(required = true)]
+    #[clap(help = "Time durations to calculate, e.g. 1w 2d 3h 4m -15m 08:00-12:00 12:30-16")]
+    durations: Vec<String>,
+}
 
 fn main() -> Result<()> {
-    let args: Vec<String> = env::args().skip(1).collect();
-
-    if args.is_empty() {
-        eprintln!("Usage: tc <time range or interval> ...");
-        return Err(anyhow::anyhow!("Invalid arguments"));
-    }
-
-    let args_list: Vec<&str> = args.iter().map(AsRef::as_ref).collect();
-    let total_duration = calculate_total_time(&args_list)?;
-    let output = timedelta_to_str(total_duration);
+    let args = Args::parse();
+    let durations = args.durations;
+    let total_duration = calculate_total_time(&durations)?;
+    let output = duration_to_str(total_duration);
     println!("{}", output);
 
     Ok(())

@@ -102,16 +102,16 @@ pub fn duration_to_str(duration: Duration) -> String {
     let minutes = duration.num_minutes() % 60;
 
     let mut output = String::new();
-    if weeks != 0 {
+    if weeks > 0 {
         output.push_str(&format!("{}w ", weeks));
     }
-    if days != 0 {
+    if days > 0 {
         output.push_str(&format!("{}d ", days));
     }
-    if hours != 0 {
+    if hours > 0 {
         output.push_str(&format!("{}h ", hours));
     }
-    if minutes != 0 {
+    if minutes > 0 {
         output.push_str(&format!("{}m", minutes));
     }
 

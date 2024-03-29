@@ -5,9 +5,9 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     /// Matches a time interval in the format `(-)N[wdhm]`
-    static ref INTERVAL_RE: Regex = Regex::new(r"^(-?\d+)([wdhm])$").unwrap();
+    static ref DURATION_RE: Regex = Regex::new(r"^(-?\d+)([wdhm])$").unwrap();
     /// Matches a range part in the format `HH:MM`, `H:MM`, `HH`, or `H`
-    static ref RANGE_PART_RE: Regex = Regex::new(r"^((?:[0-1]?\d)|(?:2[0-3]))(?::([0-5]\d))?$").unwrap();
+    static ref TIME_INTERVAL_PART_RE: Regex = Regex::new(r"^((?:[0-1]?\d)|(?:2[0-3]))(?::([0-5]\d))?$").unwrap();
 }
 
 #[derive(thiserror::Error, Debug, PartialEq)]
@@ -21,12 +21,12 @@ pub enum TimecalcError {
 ///
 /// The interval can be positive or negative, and the unit can be weeks, days,
 /// hours, or minutes.
-fn parse_time_interval(input: &str) -> Option<Duration> {
-    match INTERVAL_RE.captures(input) {
+fn parse_duration_arg(arg: &str) -> Option<Duration> {
+    match DURATION_RE.captures(arg) {
         Some(captures) => {
             let value: i64 = captures[1]
                 .parse()
-                .unwrap_or_else(|_| panic!("Failed to parse duration: {}", input));
+                .unwrap_or_else(|_| panic!("Failed to parse duration: {}", arg));
             let unit = &captures[2];
 
             match unit {
@@ -41,8 +41,8 @@ fn parse_time_interval(input: &str) -> Option<Duration> {
     }
 }
 
-fn parse_range_part(input: &str) -> Option<Duration> {
-    match RANGE_PART_RE.captures(input) {
+fn parse_time_interval_part(input: &str) -> Option<Duration> {
+    match TIME_INTERVAL_PART_RE.captures(input) {
         Some(captures) => {
             let hour = captures[1].parse::<i64>().unwrap();
             let minute = captures
@@ -54,7 +54,7 @@ fn parse_range_part(input: &str) -> Option<Duration> {
     }
 }
 
-/// Parse a time range in the format `HH:MM-HH:MM` and return the duration
+/// Parse a time interval in the format `HH:MM-HH:MM` and return the duration
 /// between the start and end time.
 ///
 /// The start and end time can be in the format `HH:MM`, `HH`, `H:MM`, or `H`.
@@ -63,13 +63,16 @@ fn parse_range_part(input: &str) -> Option<Duration> {
 /// - `08:00-12:00`
 /// - `8:00-08:30`
 /// - `8-12`
-fn parse_range(input: &str) -> Option<Duration> {
+fn parse_time_interval_arg(input: &str) -> Option<Duration> {
     let splits: Vec<&str> = input.split('-').collect();
     if splits.len() != 2 {
         return None;
     }
 
-    let duration = match (parse_range_part(splits[0]), parse_range_part(splits[1])) {
+    let duration = match (
+        parse_time_interval_part(splits[0]),
+        parse_time_interval_part(splits[1]),
+    ) {
         (Some(start), Some(end)) => Some(end - start),
         _ => None,
     };
@@ -77,24 +80,24 @@ fn parse_range(input: &str) -> Option<Duration> {
     duration.filter(|duration| *duration >= Duration::zero())
 }
 
-fn parse(input: &str) -> Result<Duration, TimecalcError> {
-    if let Some(interval) = parse_time_interval(input) {
+fn parse_arg(arg: &str) -> Result<Duration, TimecalcError> {
+    if let Some(interval) = parse_duration_arg(arg) {
         return Ok(interval);
     }
 
-    if let Some(range) = parse_range(input) {
+    if let Some(range) = parse_time_interval_arg(arg) {
         return Ok(range);
     }
 
-    Err(TimecalcError::ParseError(input.to_string()))
+    Err(TimecalcError::ParseError(arg.to_string()))
 }
 
-pub fn calculate_total_time(args_list: &[&str]) -> Result<Duration, TimecalcError> {
-    args_list
-        .iter()
-        .try_fold(Duration::seconds(0), |acc, input| Ok(acc + parse(input)?))
+pub fn parse_args(args: &[&str]) -> Result<Duration, TimecalcError> {
+    args.iter()
+        .try_fold(Duration::seconds(0), |acc, arg| Ok(acc + parse_arg(arg)?))
 }
 
+// TODO: Rename to Jira time format
 pub fn duration_to_str(duration: Duration) -> String {
     let weeks = duration.num_weeks();
     let days = duration.num_days() % 7;
@@ -124,33 +127,41 @@ mod tests {
     use anyhow::{Ok, Result};
     #[test]
     fn test_parse_time_interval() -> Result<()> {
-        assert_eq!(parse_time_interval("1w").unwrap(), Duration::weeks(1));
-        assert_eq!(parse_time_interval("2d").unwrap(), Duration::days(2));
-        assert_eq!(parse_time_interval("3h").unwrap(), Duration::hours(3));
-        assert_eq!(parse_time_interval("4m").unwrap(), Duration::minutes(4));
-        assert_eq!(parse_time_interval("-1w").unwrap(), Duration::weeks(-1));
-        assert_eq!(parse_time_interval("-2d").unwrap(), Duration::days(-2));
-        assert_eq!(parse_time_interval("-3h").unwrap(), Duration::hours(-3));
-        assert_eq!(parse_time_interval("-4m").unwrap(), Duration::minutes(-4));
-        assert!(parse_time_interval("1x").is_none());
+        assert_eq!(parse_duration_arg("1w").unwrap(), Duration::weeks(1));
+        assert_eq!(parse_duration_arg("2d").unwrap(), Duration::days(2));
+        assert_eq!(parse_duration_arg("3h").unwrap(), Duration::hours(3));
+        assert_eq!(parse_duration_arg("4m").unwrap(), Duration::minutes(4));
+        assert_eq!(parse_duration_arg("-1w").unwrap(), Duration::weeks(-1));
+        assert_eq!(parse_duration_arg("-2d").unwrap(), Duration::days(-2));
+        assert_eq!(parse_duration_arg("-3h").unwrap(), Duration::hours(-3));
+        assert!(parse_duration_arg("1x").is_none());
         Ok(())
     }
 
     #[test]
     fn test_parse_time_range() -> Result<()> {
-        assert_eq!(parse_range("08:00-12:00").unwrap(), Duration::hours(4));
-        assert_eq!(parse_range("08:00-08:30").unwrap(), Duration::minutes(30));
-        assert_eq!(parse_range("8-12").unwrap(), Duration::hours(4));
-        assert_eq!(parse_range("8:00-09").unwrap(), Duration::hours(1));
-        assert_eq!(parse_range("8-9").unwrap(), Duration::hours(1));
+        assert_eq!(
+            parse_time_interval_arg("08:00-12:00").unwrap(),
+            Duration::hours(4)
+        );
+        assert_eq!(
+            parse_time_interval_arg("08:00-08:30").unwrap(),
+            Duration::minutes(30)
+        );
+        assert_eq!(parse_time_interval_arg("8-12").unwrap(), Duration::hours(4));
+        assert_eq!(
+            parse_time_interval_arg("8:00-09").unwrap(),
+            Duration::hours(1)
+        );
+        assert_eq!(parse_time_interval_arg("8-9").unwrap(), Duration::hours(1));
         Ok(())
     }
 
     #[test]
-    fn test_calculate_total_time() -> Result<()> {
+    fn test_parse_args() -> Result<()> {
         let args_list = vec!["1w", "2d", "3h", "4m", "08:00-12:00", "08:00-08:30", "8-12"];
         assert_eq!(
-            calculate_total_time(&args_list)?,
+            parse_args(&args_list)?,
             Duration::weeks(1)
                 + Duration::days(2)
                 + Duration::hours(3)
@@ -186,13 +197,13 @@ mod tests {
 
     #[test]
     fn test_parse() -> Result<()> {
-        assert_eq!(parse("1w")?, Duration::weeks(1));
-        assert_eq!(parse("2d")?, Duration::days(2));
-        assert_eq!(parse("3h")?, Duration::hours(3));
-        assert_eq!(parse("4m")?, Duration::minutes(4));
-        assert_eq!(parse("08:00-12:00")?, Duration::hours(4));
-        assert_eq!(parse("08:00-08:30")?, Duration::minutes(30));
-        assert_eq!(parse("8-12")?, Duration::hours(4));
+        assert_eq!(parse_arg("1w")?, Duration::weeks(1));
+        assert_eq!(parse_arg("2d")?, Duration::days(2));
+        assert_eq!(parse_arg("3h")?, Duration::hours(3));
+        assert_eq!(parse_arg("4m")?, Duration::minutes(4));
+        assert_eq!(parse_arg("08:00-12:00")?, Duration::hours(4));
+        assert_eq!(parse_arg("08:00-08:30")?, Duration::minutes(30));
+        assert_eq!(parse_arg("8-12")?, Duration::hours(4));
         Ok(())
     }
 }

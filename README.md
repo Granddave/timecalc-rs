@@ -10,10 +10,9 @@ This is the Rust implementation of my [previous tool written in Python](https://
 
 ```bash
 $ timecalc --help
-Calculates the total time of a given set of time ranges and intervals
-A duration is either a time range or an interval.
-Time ranges are specified as `start-end`, e.g. `9-12:30`.
-Intervals are specified as `+duration` or `-duration`, e.g. `1h` or `-30m`.
+Calculates the total time of a given set of time intervals and durations
+Intervals are specified as `start-end`, e.g. `9-12:30`.
+Durations are specified as `+duration` or `-duration`, e.g. `1h` or `-30m`.
 
 Valid duration units are:
   w for weeks

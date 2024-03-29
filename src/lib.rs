@@ -89,7 +89,7 @@ fn parse(input: &str) -> Result<Duration, TimecalcError> {
     Err(TimecalcError::ParseError(input.to_string()))
 }
 
-pub fn calculate_total_time(args_list: &[String]) -> Result<Duration, TimecalcError> {
+pub fn calculate_total_time(args_list: &[&str]) -> Result<Duration, TimecalcError> {
     args_list
         .iter()
         .try_fold(Duration::seconds(0), |acc, input| Ok(acc + parse(input)?))
@@ -148,15 +148,7 @@ mod tests {
 
     #[test]
     fn test_calculate_total_time() -> Result<()> {
-        let args_list = vec![
-            "1w".to_string(),
-            "2d".to_string(),
-            "3h".to_string(),
-            "4m".to_string(),
-            "08:00-12:00".to_string(),
-            "08:00-08:30".to_string(),
-            "8-12".to_string(),
-        ];
+        let args_list = vec!["1w", "2d", "3h", "4m", "08:00-12:00", "08:00-08:30", "8-12"];
         assert_eq!(
             calculate_total_time(&args_list)?,
             Duration::weeks(1)

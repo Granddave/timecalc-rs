@@ -47,6 +47,7 @@ fn main() -> Result<()> {
     } else {
         args.durations
     };
+    let durations: Vec<&str> = durations.iter().map(|s| s.as_str()).collect();
     let total_duration = calculate_total_time(&durations)?;
     let output = duration_to_str(total_duration);
     println!("{}", output);

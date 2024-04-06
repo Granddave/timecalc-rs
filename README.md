@@ -1,13 +1,18 @@
 ![ci](https://github.com/Granddave/timecalc-rs/actions/workflows/ci.yml/badge.svg)
 [![dependency status](https://deps.rs/repo/github/granddave/timecalc-rs/status.svg)](https://deps.rs/repo/github/granddave/timecalc-rs)
-![Crates.io Version](https://img.shields.io/crates/v/timecalc)
+[![Crates.io Version](https://img.shields.io/crates/v/timecalc)](https://crates.io/crates/timecalc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Timecalc-rs
+# timecalc
 
-Timecalc-rs is a simple CLI tool that calculates the total time spent on a project given intervals and durations.
+Timecalc is a simple CLI tool that calculates the total time spent on a project given intervals and durations.
 
 This is the Rust implementation of my [previous tool written in Python](https://github.com/Granddave/timecalc).
+
+Timecalc is available as both a [crate](https://crates.io/crates/timecalc) and as a standalone binary.
+See the [installation instructions](#installation) on how to install it,
+or the [documentation](https://docs.rs/timecalc) for more information about the crate.
+
 
 ## How to use
 
@@ -33,7 +38,6 @@ Options:
   -s, --stdin    Read arguments from stdin
   -h, --help     Print help
   -V, --version  Print version
-
 ```
 
 ### Example

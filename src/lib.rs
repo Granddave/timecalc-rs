@@ -93,7 +93,6 @@ pub fn parse_args(args: &[&str]) -> Result<Duration, TimecalcError> {
         .try_fold(Duration::seconds(0), |acc, arg| Ok(acc + parse_arg(arg)?))
 }
 
-// TODO: Rename to Jira time format
 pub fn duration_to_str(duration: Duration) -> String {
     let weeks = duration.num_weeks();
     let days = duration.num_days() % 7;

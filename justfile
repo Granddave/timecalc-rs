@@ -1,4 +1,7 @@
-default: test lint format
+default: build test lint format
+
+build:
+  cargo build
 
 test:
   cargo test

@@ -94,6 +94,10 @@ pub fn parse_args(args: &[&str]) -> Result<Duration, TimecalcError> {
 }
 
 pub fn duration_to_str(duration: Duration) -> String {
+    if duration == Duration::zero() {
+        return "0m".to_string();
+    }
+
     let weeks = duration.num_weeks();
     let days = duration.num_days() % 7;
     let hours = duration.num_hours() % 24;

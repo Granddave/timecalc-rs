@@ -189,6 +189,11 @@ mod tests {
         assert_eq!(duration_to_str(Duration::days(2)), "2d");
         assert_eq!(duration_to_str(Duration::hours(3)), "3h");
         assert_eq!(duration_to_str(Duration::minutes(4)), "4m");
+        assert_eq!(
+            duration_to_str(Duration::days(1) - Duration::hours(1)),
+            "23h"
+        );
+        assert_eq!(duration_to_str(Duration::zero()), "0m");
     }
 
     #[test]

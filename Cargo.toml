@@ -1,8 +1,12 @@
 [package]
-name = "timecalc-rs"
+name = "timecalc"
 version = "0.3.0"
 edition = "2021"
 authors = ["David Isaksson <davidisaksson93@gmail.com>"]
+
+[lib]
+name = "timecalc"
+path = "src/lib.rs"
 
 [[bin]]
 name = "timecalc"

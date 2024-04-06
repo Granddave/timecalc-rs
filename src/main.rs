@@ -2,13 +2,13 @@ use anyhow::Result;
 use clap::{crate_version, Parser};
 use std::io::{self, BufRead};
 
-use timecalc_rs::{duration_to_str, parse_args};
+use timecalc::{duration_to_str, parse_args};
 
 #[derive(Parser, Debug)]
 #[clap(
-    name = "Timecalc",
+    name = "timecalc",
     version = crate_version!(),
-    about = "Calculates the total duration of a given set of intervals and durations."
+    about = "Calculate the total duration of a given set of intervals and durations."
 )]
 struct Cli {
     #[clap(

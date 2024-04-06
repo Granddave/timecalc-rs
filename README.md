@@ -1,16 +1,19 @@
 ![ci](https://github.com/Granddave/timecalc-rs/actions/workflows/ci.yml/badge.svg)
+[![dependency status](https://deps.rs/repo/github/granddave/timecalc-rs/status.svg)](https://deps.rs/repo/github/granddave/timecalc-rs)
+![Crates.io Version](https://img.shields.io/crates/v/timecalc)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Timecalc-rs
 
 Timecalc-rs is a simple CLI tool that calculates the total time spent on a project given intervals and durations.
 
-This is the Rust implementation of my [previous tool written in Python](https://github.com/Granddave/timecalc)
+This is the Rust implementation of my [previous tool written in Python](https://github.com/Granddave/timecalc).
 
 ## How to use
 
 ```bash
 $ timecalc --help
-Calculates the total duration of a given set of intervals and durations.
+Calculate the total duration of a given set of intervals and durations.
 
 Usage: timecalc [OPTIONS] [DURATION_ARGS]...
 

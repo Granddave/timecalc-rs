@@ -3,6 +3,11 @@ name = "timecalc"
 version = "0.3.0"
 edition = "2021"
 authors = ["David Isaksson <davidisaksson93@gmail.com>"]
+license = "MIT"
+description = "Calculate the total duration of a given set of intervals and durations"
+repository = "https://github.com/granddave/timecalc-rs/"
+keywords = ["cli", "parser", "utility", "time", "time-reporting", "time-tracking"]
+categories = ["command-line-interface", "command-line-utilities", "date-and-time", "parsing"]
 
 [lib]
 name = "timecalc"

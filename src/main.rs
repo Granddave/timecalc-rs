@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::{crate_version, Parser};
 use std::io::{self, BufRead};
 
-use timecalc::{duration_to_str, parse_args};
+use timecalc::{formatter::duration_to_str, parser::parse_args};
 
 #[derive(Parser, Debug)]
 #[clap(

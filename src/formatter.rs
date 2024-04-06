@@ -1,5 +1,16 @@
 use chrono::Duration;
 
+/// Format a [duration](chrono::Duration) into a [String].
+///
+/// ## Example
+/// ```
+/// use chrono::Duration;
+/// use timecalc::formatter::duration_to_str;
+///
+/// assert_eq!(duration_to_str(Duration::hours(1)), "1h");
+/// assert_eq!(duration_to_str(Duration::minutes(30)), "30m");
+/// assert_eq!(duration_to_str(Duration::hours(1) + Duration::minutes(30)), "1h 30m");
+/// ```
 pub fn duration_to_str(duration: Duration) -> String {
     if duration == Duration::zero() {
         return "0m".to_string();

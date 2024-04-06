@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::{crate_version, Parser};
 use std::io::{self, BufRead};
 
-use timecalc::{formatter::duration_to_str, parser::parse_args};
+use timecalc::{formatter::duration_to_str, parser::parse_expressions};
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -48,7 +48,7 @@ fn main() -> Result<()> {
         cli.duration_args
     };
     let args: Vec<&str> = args.iter().map(|s| s.as_str()).collect();
-    let total_duration = parse_args(&args)?;
+    let total_duration = parse_expressions(&args)?;
     let output = duration_to_str(total_duration);
     println!("{}", output);
 

@@ -2,7 +2,7 @@
 
 # Timecalc-rs
 
-Timecalc-rs is a simple CLI tool that calculates the total time spent on a project given time ranges and intervals.
+Timecalc-rs is a simple CLI tool that calculates the total time spent on a project given intervals and durations.
 
 This is the Rust implementation of my [previous tool written in Python](https://github.com/Granddave/timecalc)
 
@@ -10,26 +10,27 @@ This is the Rust implementation of my [previous tool written in Python](https://
 
 ```bash
 $ timecalc --help
-Calculates the total time of a given set of time ranges and intervals
-A duration is either a time range or an interval.
-Time ranges are specified as `start-end`, e.g. `9-12:30`.
-Intervals are specified as `+duration` or `-duration`, e.g. `1h` or `-30m`.
+Calculates the total duration of a given set of intervals and durations.
 
-Valid duration units are:
-  w for weeks
-  d for days
-  h for hours
-  m for minutes
-
-Usage: timecalc [OPTIONS] [DURATIONS]...
+Usage: timecalc [OPTIONS] [DURATION_ARGS]...
 
 Arguments:
-  [DURATIONS]...  Time durations to calculate in time ranges or intervals, e.g. 9-12:30, 1h or -30m
+  [DURATION_ARGS]...  Intervals or durations to sum
+
+                      Intervals are specified as `start-end`, e.g. `9-12:30`.
+                      Durations are specified as `+duration` or `-duration`, e.g. `1h` or `-30m`.
+
+                      Valid duration units are:
+                        w for weeks
+                        d for days
+                        h for hours
+                        m for minutes
 
 Options:
-  -s, --stdin    Read durations from stdin
+  -s, --stdin    Read arguments from stdin
   -h, --help     Print help
   -V, --version  Print version
+
 ```
 
 ### Example

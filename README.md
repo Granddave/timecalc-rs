@@ -1,4 +1,4 @@
-![ci](https://github.com/Granddave/timecalc-rs/actions/workflows/ci.yml/badge.svg)
+[![ci](https://github.com/Granddave/timecalc-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/Granddave/timecalc-rs/actions)
 [![dependency status](https://deps.rs/repo/github/granddave/timecalc-rs/status.svg)](https://deps.rs/repo/github/granddave/timecalc-rs)
 [![Crates.io Version](https://img.shields.io/crates/v/timecalc)](https://crates.io/crates/timecalc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)

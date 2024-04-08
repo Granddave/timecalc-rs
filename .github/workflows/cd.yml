@@ -57,7 +57,8 @@ jobs:
 
     name: Binaries for ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
-
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af

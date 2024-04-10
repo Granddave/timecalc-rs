@@ -70,7 +70,7 @@ jobs:
           toolchain: stable
           targets: ${{ matrix.target }}
       - name: Install cross
-        if: matrix.job.use-cross
+        if: matrix.cross
         uses: taiki-e/install-action@v2
         with:
           tool: cross
@@ -79,10 +79,10 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          if [[ "${{ matrix.job.use-cross }}" == "true" ]]; then
-            cross build --release --locked --target ${{ matrix.job.target }}
+          if [[ "${{ matrix.cross }}" == "true" ]]; then
+            cross build --release --locked --target ${{ matrix.target }}
           else
-            cargo build --release --locked --target ${{ matrix.job.target }}
+            cargo build --release --locked --target ${{ matrix.target }}
           fi
       - name: Package
         shell: bash

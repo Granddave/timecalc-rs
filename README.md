@@ -55,10 +55,16 @@ $ echo 7-11:30 -15m 4h | timecalc -s
 
 ## Installation
 
-The easiest way to install timecalc-rs is using `cargo`:
+### Releases
+
+The latest release can be downloaded as a standalone binary from the [releases page](https://github.com/Granddave/timecalc-rs/releases/latest).
+
+### Using `cargo`
+
+It can also be compiled and installed via `cargo`:
 
 ```bash
-cargo install --git https://github.com/Granddave/timecalc-rs
+cargo install timecalc
 ```
 
 ## License

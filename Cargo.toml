@@ -18,7 +18,7 @@ name = "timecalc"
 path = "src/main.rs"
 
 [dependencies]
-anyhow = "1.0"
+anyhow = "1.0.82"
 chrono = "0.4"
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
 lazy_static = "1.4.0"

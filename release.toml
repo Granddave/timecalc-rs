@@ -1,1 +1,2 @@
 publish = false  # Let the CI do the publishing
+allow-branch = ['master']

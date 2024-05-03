@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Install Cargo release
+Install [Cargo release](https://github.com/crate-ci/cargo-release):
 
 ```bash
 cargo install cargo-release
@@ -10,7 +10,7 @@ cargo install cargo-release
 
 ## Actions
 
-1. Start of with a clean repo
+1. Start of with a clean repo on the master branch
 2. Dry-run the release for the next version, e.g.
     - `cargo release patch`
     - `cargo release minor`

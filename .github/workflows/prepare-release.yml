@@ -16,6 +16,22 @@ env:
   RUSTDOCFLAGS: -D warnings
 
 jobs:
+  create_release_draft:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create release draft
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref }}
+          name: ${{ github.ref }}
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     strategy:
       matrix:
@@ -109,9 +125,11 @@ jobs:
           version=$(echo "${{ github.ref }}" | cut -d/ -f3)
           dst="timecalc-${{ matrix.target }}-${version}"
           7z a "$dst.zip" "$dst"
-      - name: Create release draft
+      - name: Upload artifact to release draft
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref }}
+          name: ${{ github.ref }}
           draft: true
           files: |
             timecalc-*.tgz

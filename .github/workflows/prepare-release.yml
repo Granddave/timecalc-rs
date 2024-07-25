@@ -26,8 +26,8 @@ jobs:
       - name: Create release draft
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -106,7 +106,7 @@ jobs:
           ext=""
           [[ "${{ matrix.name }}" == windows-* ]] && ext=".exe"
           bin="target/${{ matrix.target }}/release/timecalc${ext}"
-          version=$(echo "${{ github.ref }}" | cut -d/ -f3)
+          version=$GITHUB_REF_NAME
           dst="timecalc-${{ matrix.target }}-${version}"
           mkdir "$dst"
           mv "$bin" "$dst/"
@@ -115,21 +115,21 @@ jobs:
         if: '! startsWith(matrix.name, ''windows-'')'
         shell: bash
         run: |
-          version=$(echo "${{ github.ref }}" | cut -d/ -f3)
+          version=$GITHUB_REF_NAME
           dst="timecalc-${{ matrix.target }}-${version}"
           tar cavf "$dst.tgz" "$dst"
       - name: Archive (zip)
         if: startsWith(matrix.name, 'windows-')
         shell: bash
         run: |
-          version=$(echo "${{ github.ref }}" | cut -d/ -f3)
+          version=$GITHUB_REF_NAME
           dst="timecalc-${{ matrix.target }}-${version}"
           7z a "$dst.zip" "$dst"
       - name: Upload artifact to release draft
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          name: ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           draft: true
           files: |
             timecalc-*.tgz

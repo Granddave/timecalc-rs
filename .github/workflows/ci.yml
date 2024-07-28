@@ -74,7 +74,9 @@ jobs:
       - name: Get build cache
         uses: Swatinem/rust-cache@v2
       - name: Run Cargo Test
-        run: cargo test -r --all-targets --workspace
+        run: |
+          cargo build -r --all-targets --workspace
+          cargo test -r --all-targets --workspace
 
   docs:
     name: Build docs

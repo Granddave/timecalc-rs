@@ -16,18 +16,39 @@ env:
   RUSTDOCFLAGS: -D warnings
 
 jobs:
+  set_version:
+    name: Set version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version_step.outputs.version }}
+    steps:
+      - name: Set version
+        id: set_version_step
+        run: |
+          version=""
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            version="${GITHUB_REF_NAME}"
+          else
+            version="${{ github.event.inputs.version }}"
+          fi
+          echo "version=${version#v}" >> $GITHUB_OUTPUT
+
   create_release_draft:
+    name: Create release draft
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    needs: set_version
     steps:
+      - name: Echo version
+        run: echo "Creating release for ${{ needs.set_version.outputs.version }}"
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create release draft
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          name: ${{ needs.set_version.outputs.version }}
           draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -74,6 +95,9 @@ jobs:
             cross: false
 
     name: Binaries for ${{ matrix.name }}
+    needs:
+      - set_version
+      - create_release_draft
     runs-on: ${{ matrix.os }}
     permissions:
       contents: write
@@ -107,8 +131,7 @@ jobs:
           if [[ "${{ matrix.name }}" == windows-* ]]; then
             bin="${bin}.exe"
           fi
-          version=$GITHUB_REF_NAME
-          outdir="timecalc-${{ matrix.target }}-${version}"
+          outdir="timecalc-${{ matrix.target }}-${{ needs.set_version.outputs.version }}"
           mkdir "${outdir}"
           mv "${bin}" "${outdir}/"
           cp README.md LICENSE "${outdir}/"
@@ -122,7 +145,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          name: ${{ github.ref_name }}
+          name: ${{ needs.set_version.outputs.version }}
           draft: true
           files: |
             timecalc-*.tgz

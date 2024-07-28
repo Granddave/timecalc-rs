@@ -103,28 +103,21 @@ jobs:
       - name: Package
         shell: bash
         run: |
-          ext=""
-          [[ "${{ matrix.name }}" == windows-* ]] && ext=".exe"
-          bin="target/${{ matrix.target }}/release/timecalc${ext}"
+          bin="target/${{ matrix.target }}/release/timecalc"
+          if [[ "${{ matrix.name }}" == windows-* ]]; then
+            bin="${bin}.exe"
+          fi
           version=$GITHUB_REF_NAME
-          dst="timecalc-${{ matrix.target }}-${version}"
-          mkdir "$dst"
-          mv "$bin" "$dst/"
-          cp README.md LICENSE "$dst/"
-      - name: Archive (tar)
-        if: '! startsWith(matrix.name, ''windows-'')'
-        shell: bash
-        run: |
-          version=$GITHUB_REF_NAME
-          dst="timecalc-${{ matrix.target }}-${version}"
-          tar cavf "$dst.tgz" "$dst"
-      - name: Archive (zip)
-        if: startsWith(matrix.name, 'windows-')
-        shell: bash
-        run: |
-          version=$GITHUB_REF_NAME
-          dst="timecalc-${{ matrix.target }}-${version}"
-          7z a "$dst.zip" "$dst"
+          outdir="timecalc-${{ matrix.target }}-${version}"
+          mkdir "${outdir}"
+          mv "${bin}" "${outdir}/"
+          cp README.md LICENSE "${outdir}/"
+
+          if [[ "${{ matrix.name }}" == windows-* ]]; then
+            7z a "${outdir}.zip" "${outdir}"
+          else
+            tar cavf "${outdir}.tgz" "${outdir}"
+          fi
       - name: Upload artifact to release draft
         uses: softprops/action-gh-release@v2
         with:

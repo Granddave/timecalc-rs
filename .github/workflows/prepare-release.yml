@@ -131,7 +131,7 @@ jobs:
           if [[ "${{ matrix.name }}" == windows-* ]]; then
             bin="${bin}.exe"
           fi
-          outdir="timecalc-${{ needs.set_version.outputs.version }}-${{ matrix.target }}-"
+          outdir="timecalc-${{ needs.set_version.outputs.version }}-${{ matrix.target }}"
           mkdir "${outdir}"
           mv "${bin}" "${outdir}/"
           cp README.md LICENSE "${outdir}/"

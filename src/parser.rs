@@ -71,8 +71,7 @@ pub(crate) fn parse_interval_expression(input: &str) -> Option<Duration> {
     duration.filter(|duration| *duration >= Duration::zero())
 }
 
-/// Parse a duration expression or interval expression and return the [Duration](chrono::Duration) it
-/// represents.
+/// Parse a duration expression or interval expression and return the [Duration] it represents.
 pub fn parse_expression(arg: &str) -> Result<Duration, TimecalcError> {
     if let Some(duration) = parse_duration_expression(arg) {
         return Ok(duration);
@@ -85,7 +84,7 @@ pub fn parse_expression(arg: &str) -> Result<Duration, TimecalcError> {
     Err(TimecalcError::ParseError(arg.to_string()))
 }
 
-/// Parse a list of duration expressions or interval expressions and return the total [Duration](chrono::Duration)
+/// Parse a list of duration expressions or interval expressions and return the total [Duration]
 /// they represent.
 pub fn parse_expressions(args: &[&str]) -> Result<Duration, TimecalcError> {
     args.iter().try_fold(Duration::seconds(0), |acc, arg| {

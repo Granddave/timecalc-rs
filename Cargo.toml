@@ -23,4 +23,4 @@ chrono = "0.4"
 clap = { version = "4.5.4", features = ["derive", "cargo"] }
 lazy_static = "1.4.0"
 regex = "1.10"
-thiserror = "1.0"
+thiserror = "2"

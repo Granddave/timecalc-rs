@@ -24,6 +24,8 @@
           buildInputs = with pkgs; [
             rustToolchain
             just
+
+            cargo-release
           ];
 
           shellHook = ''

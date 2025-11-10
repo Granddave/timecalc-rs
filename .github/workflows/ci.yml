@@ -36,7 +36,7 @@ jobs:
           - os: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install Just
         uses: extractions/setup-just@v2
       - name: Install Rust toolchain
